@@ -1,17 +1,25 @@
 from deepface import DeepFace as df
-import pickle
 import time
-import cv2
-import os
+
+
+def is_foto_in_db(path):
+    # подгрузка файла из db
+    for i in range(1, 5): # тут должны данные братся из дб
+        similar= 0
+        different = 0
+        result = df.verify(img1_path=path,
+            img2_path="images/" + str(i)+".jpg",
+            model_name="Facenet512", enforce_detection=False)
+        if result["verified"] == True:
+            similar += 1
+        else:
+            different += 1
+    return (similar > different)
 
 
 def main():
-    for i in range(1, 7):
-        for j in range(1, 7):
-            result = df.verify(img1_path="images/" + str(i) +".jpg",
-                                     img2_path="images/" + str(j)+".jpg",
-                                     model_name="VGG-Face", enforce_detection=False)
-            print(i, j, result['verified'])
+    t = time.time()
+    print(is_foto_in_db("images/7.jpg"), time.time()-t)
 
 
 if __name__ == "__main__":
